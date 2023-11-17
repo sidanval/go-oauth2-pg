@@ -187,7 +187,7 @@ func (s *TokenStore) GetByCode(ctx context.Context, code string) (oauth2.TokenIn
 	}
 
 	var item TokenStoreItem
-	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE code = $1", s.tableName), code); err != nil {
+	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE code = $1 order by id desc limit 1", s.tableName), code); err != nil {
 		if err == pgAdapter.ErrNoRows {
 			return nil, nil
 		}
@@ -204,7 +204,7 @@ func (s *TokenStore) GetByAccess(ctx context.Context, access string) (oauth2.Tok
 	}
 
 	var item TokenStoreItem
-	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE access = $1", s.tableName), access); err != nil {
+	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE access = $1 order by id desc limit 1", s.tableName), access); err != nil {
 		if err == pgAdapter.ErrNoRows {
 			return nil, nil
 		}
@@ -221,7 +221,7 @@ func (s *TokenStore) GetByRefresh(ctx context.Context, refresh string) (oauth2.T
 	}
 
 	var item TokenStoreItem
-	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE refresh = $1", s.tableName), refresh); err != nil {
+	if err := s.adapter.SelectOne(ctx, &item, fmt.Sprintf("SELECT * FROM %s WHERE refresh = $1 order by id desc limit 1", s.tableName), refresh); err != nil {
 		if err == pgAdapter.ErrNoRows {
 			return nil, nil
 		}
